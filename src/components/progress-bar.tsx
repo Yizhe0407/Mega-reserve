@@ -7,7 +7,7 @@ interface ProgressBarProps {
 
 export function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
   return (
-    <div className="fixed top-0 left-0 w-full px-4 py-4 z-10 bg-white">
+    <div className="fixed top-0 left-1/2 -translate-x-1/2 max-w-md px-4 py-4 z-10 bg-white mx-auto">
       <div className="flex items-center justify-between mb-3">
         {Array.from({ length: totalSteps }, (_, index) => {
           const stepNumber = index + 1
