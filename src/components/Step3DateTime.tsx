@@ -4,16 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Separator } from "@/components/ui/separator"
-import { ProgressBar } from "./progress-bar"
-import { StepButtonGroup } from "./step-button-group"
+import { ProgressBar } from "./ProgressBar"
+import { StepButtonGroup } from "./StepButtonGroup"
 import { useState } from "react"
 
-interface Step3DateTimeProps {
-  onNext: () => void
-  onPrevious: () => void
-}
-
-export function Step3DateTime({ onNext, onPrevious }: Step3DateTimeProps) {
+export function Step3DateTime() {
   const [selectedDate, setSelectedDate] = useState<Date>()
   const [selectedTime, setSelectedTime] = useState<string>("")
 
@@ -21,7 +16,7 @@ export function Step3DateTime({ onNext, onPrevious }: Step3DateTimeProps) {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      <ProgressBar currentStep={3} totalSteps={4} />
+      <ProgressBar />
 
       <div className="px-4 pt-20">
         <Card>
@@ -64,9 +59,6 @@ export function Step3DateTime({ onNext, onPrevious }: Step3DateTimeProps) {
       </div>
 
       <StepButtonGroup
-        onNext={onNext}
-        onPrevious={onPrevious}
-        nextButtonText="下一步"
         isNextDisabled={!selectedDate || !selectedTime}
       />
     </div>

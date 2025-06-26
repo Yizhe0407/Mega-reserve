@@ -1,15 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
-import { ProgressBar } from "./progress-bar"
-import { StepButtonGroup } from "./step-button-group"
+import { ProgressBar } from "./ProgressBar"
+import { StepButtonGroup } from "./StepButtonGroup"
 
-interface Step4ConfirmProps {
-  onNext: () => void
-  onPrevious: () => void
-}
-
-export function Step4Confirm({ onNext, onPrevious }: Step4ConfirmProps) {
+export function Step4Confirm() {
   // 模擬預約資料
   const bookingData = {
     name: "王小明",
@@ -23,7 +18,7 @@ export function Step4Confirm({ onNext, onPrevious }: Step4ConfirmProps) {
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      <ProgressBar currentStep={4} totalSteps={4} />
+      <ProgressBar />
 
       <div className="px-4 pt-20">
         <Card>
@@ -90,7 +85,7 @@ export function Step4Confirm({ onNext, onPrevious }: Step4ConfirmProps) {
         </Card>
       </div>
 
-      <StepButtonGroup onNext={onNext} onPrevious={onPrevious} nextButtonText="確認預約" />
+      <StepButtonGroup />
     </div>
   )
 }

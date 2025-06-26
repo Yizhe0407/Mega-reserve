@@ -1,17 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { ProgressBar } from "./progress-bar"
-import { StepButtonGroup } from "./step-button-group"
+import { ProgressBar } from "./ProgressBar"
+import { StepButtonGroup } from "./StepButtonGroup"
 
-interface Step1UserInfoProps {
-  onNext: () => void
-  onPrevious: () => void
-}
-
-export function Step1UserInfo({ onNext, onPrevious }: Step1UserInfoProps) {
+export function Step1UserInfo() {
   return (
     <div className="min-h-screen bg-background pb-24">
-      <ProgressBar currentStep={1} totalSteps={4} />
+      <ProgressBar />
 
       <div className="px-4 pt-20">
         <Card>
@@ -43,7 +38,7 @@ export function Step1UserInfo({ onNext, onPrevious }: Step1UserInfoProps) {
         </Card>
       </div>
 
-      <StepButtonGroup onNext={onNext} onPrevious={onPrevious} isPreviousDisabled={true} nextButtonText="下一步" />
+      <StepButtonGroup />
     </div>
   )
 }

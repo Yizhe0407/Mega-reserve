@@ -5,16 +5,11 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { ProgressBar } from "./progress-bar"
-import { StepButtonGroup } from "./step-button-group"
+import { ProgressBar } from "./ProgressBar"
+import { StepButtonGroup } from "./StepButtonGroup"
 import { useState } from "react"
 
-interface Step2ServiceSelectProps {
-  onNext: () => void
-  onPrevious: () => void
-}
-
-export function Step2ServiceSelect({ onNext, onPrevious }: Step2ServiceSelectProps) {
+export function Step2ServiceSelect() {
   const [selectedServices, setSelectedServices] = useState<string[]>([])
   const [showOtherInput, setShowOtherInput] = useState(false)
   const [needPickup, setNeedPickup] = useState(false)
@@ -39,7 +34,7 @@ export function Step2ServiceSelect({ onNext, onPrevious }: Step2ServiceSelectPro
 
   return (
     <div className="min-h-screen bg-background pb-24">
-      <ProgressBar currentStep={2} totalSteps={4} />
+      <ProgressBar />
 
       <div className="px-4 pt-20">
         <Card>
@@ -76,7 +71,7 @@ export function Step2ServiceSelect({ onNext, onPrevious }: Step2ServiceSelectPro
                 <Checkbox
                   id="pickup"
                   checked={needPickup}
-                  onCheckedChange={(checked) => setNeedPickup(checked as boolean)}  
+                  onCheckedChange={(checked) => setNeedPickup(checked as boolean)}
                 />
                 <Label htmlFor="pickup" className="text-sm font-normal">
                   需要到府牽車
@@ -87,7 +82,7 @@ export function Step2ServiceSelect({ onNext, onPrevious }: Step2ServiceSelectPro
         </Card>
       </div>
 
-      <StepButtonGroup onNext={onNext} onPrevious={onPrevious} nextButtonText="下一步" />
+      <StepButtonGroup nextButtonText="下一步" />
     </div>
   )
 }
