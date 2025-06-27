@@ -7,10 +7,12 @@ import { Separator } from "@/components/ui/separator"
 import { ProgressBar } from "./ProgressBar"
 import { StepButtonGroup } from "./StepButtonGroup"
 import { useState } from "react"
+import { format } from 'date-fns'
+import { useStepStore } from "@/store/step-store"
 
 export function Step3DateTime() {
-  const [selectedDate, setSelectedDate] = useState<Date>()
-  const [selectedTime, setSelectedTime] = useState<string>("")
+  const step3Data = useStepStore((state) => state.step3Data)
+  const setStep3Data = useStepStore((state) => state.setStep3Data)
 
   const timeSlots = ["8:30", "9:00", "9:30", "10:00", "10:30", "11:00", "13:00", "14:00", "15:00"]
 
@@ -27,16 +29,21 @@ export function Step3DateTime() {
             <div className="flex justify-center">
               <Calendar
                 mode="single"
-                selected={selectedDate}
-                onSelect={setSelectedDate}
-                disabled={(date) => date < new Date()}
+                selected={step3Data.date ? new Date(step3Data.date) : undefined}
+                onSelect={(day) => {
+                  setStep3Data({
+                    ...step3Data,
+                    date: day ? format(day, 'yyyy-MM-dd') : ""
+                  })
+                }}
+                disabled={(date) => date < new Date(new Date().toDateString()) || date.getDay() === 0}
                 className="rounded-md border w-[280px]"
               />
             </div>
 
             <Separator />
 
-            {!selectedDate ? (
+            {!step3Data.date ? (
               <div className="text-center py-8 text-[#a3a3a3]">
                 <p className="text-sm">請先選擇預約日期</p>
               </div>
@@ -45,8 +52,13 @@ export function Step3DateTime() {
                 {timeSlots.map((time) => (
                   <Button
                     key={time}
-                    variant={selectedTime === time ? "default" : "outline"}
-                    onClick={() => setSelectedTime(time)}
+                    variant={step3Data.time === time ? "default" : "outline"}
+                    onClick={() =>
+                      setStep3Data({
+                        ...step3Data,
+                        time,
+                      })
+                    }
                     className="h-12 text-sm"
                   >
                     {time}
@@ -59,7 +71,7 @@ export function Step3DateTime() {
       </div>
 
       <StepButtonGroup
-        isNextDisabled={!selectedDate || !selectedTime}
+        isNextDisabled={!step3Data.date || !step3Data.time}
       />
     </div>
   )

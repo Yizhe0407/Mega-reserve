@@ -3,18 +3,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Separator } from "@/components/ui/separator"
 import { ProgressBar } from "./ProgressBar"
 import { StepButtonGroup } from "./StepButtonGroup"
+import { useStepStore } from "@/store/step-store"
 
 export function Step4Confirm() {
-  // 模擬預約資料
-  const bookingData = {
-    name: "王小明",
-    phone: "0912-345-678",
-    license: "ABC-1234",
-    services: ["保養", "換輪胎"],
-    needPickup: true,
-    date: "2024年1月15日",
-    time: "10:00",
-  }
+  const step1Data = useStepStore((state) => state.step1Data)
+  const step2Data = useStepStore((state) => state.step2Data)
+  const step3Data = useStepStore((state) => state.step3Data)
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -32,15 +26,19 @@ export function Step4Confirm() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm">姓名</span>
-                    <span className="text-sm font-bold">{bookingData.name}</span>
+                    <span className="text-sm font-bold">{step1Data.name}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">手機號碼</span>
-                    <span className="text-sm font-bold">{bookingData.phone}</span>
+                    <span className="text-sm font-bold">
+                      {step1Data.phone
+                        ? step1Data.phone.replace(/^(\d{4})(\d{3})(\d{3})$/, "$1-$2-$3")
+                        : ""}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">車牌號碼</span>
-                    <span className="text-sm font-bold">{bookingData.license}</span>
+                    <span className="text-sm font-bold">{step1Data.license}</span>
                   </div>
                 </div>
               </div>
@@ -52,11 +50,11 @@ export function Step4Confirm() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm">選擇項目</span>
-                    <span className="text-sm font-bold">{bookingData.services.join("、")}</span>
+                    <span className="text-sm font-bold">{step2Data.selectServe.join("、")}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">到府牽車</span>
-                    <span className="text-sm font-bold">{bookingData.needPickup ? "是" : "否"}</span>
+                    <span className="text-sm font-bold">{step2Data.extra ? "是" : "否"}</span>
                   </div>
                 </div>
               </div>
@@ -68,11 +66,11 @@ export function Step4Confirm() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm">日期</span>
-                    <span className="text-sm font-bold">{bookingData.date}</span>
+                    <span className="text-sm font-bold">{step3Data.date}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm">時間</span>
-                    <span className="text-sm font-bold">{bookingData.time}</span>
+                    <span className="text-sm font-bold">{step3Data.time}</span>
                   </div>
                 </div>
               </div>

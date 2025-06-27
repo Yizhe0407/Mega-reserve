@@ -8,11 +8,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { ProgressBar } from "./ProgressBar"
 import { StepButtonGroup } from "./StepButtonGroup"
 import { useState } from "react"
+import { useStepStore } from "@/store/step-store"
 
 export function Step2ServiceSelect() {
   const [selectedServices, setSelectedServices] = useState<string[]>([])
   const [showOtherInput, setShowOtherInput] = useState(false)
   const [needPickup, setNeedPickup] = useState(false)
+  const step2Data = useStepStore((state) => state.step2Data)
+  const setStep2Data = useStepStore((state) => state.setStep2Data)
 
   const services = [
     { id: "maintenance", label: "保養" },
@@ -23,13 +26,20 @@ export function Step2ServiceSelect() {
   ]
 
   const toggleService = (serviceId: string) => {
-    if (serviceId === "other") {
-      setShowOtherInput(!selectedServices.includes(serviceId))
+    const current = step2Data?.selectServe || []
+    let newSelected: string[]
+    if (current.includes(serviceId)) {
+      newSelected = current.filter(id => id !== serviceId)
+      if (serviceId === "other") setShowOtherInput(false)
+    } else {
+      newSelected = [...current, serviceId]
+      if (serviceId === "other") setShowOtherInput(true)
     }
-
-    setSelectedServices((prev) =>
-      prev.includes(serviceId) ? prev.filter((id) => id !== serviceId) : [...prev, serviceId],
-    )
+    setStep2Data({
+      ...step2Data,
+      selectServe: newSelected,
+      extra: needPickup,
+    })
   }
 
   return (
@@ -48,8 +58,8 @@ export function Step2ServiceSelect() {
                 {services.map((service) => (
                   <Button
                     key={service.id}
-                    variant={selectedServices.includes(service.id) ? "default" : "outline"}
-                    onClick={() => toggleService(service.id)}
+                    variant={step2Data?.selectServe?.includes(service.label) ? "default" : "outline"}
+                    onClick={() => toggleService(service.label)}
                     className="h-12 justify-start"
                   >
                     {service.label}
@@ -58,10 +68,21 @@ export function Step2ServiceSelect() {
               </div>
             </div>
 
-            {showOtherInput && (
+            {step2Data?.selectServe?.includes("other") && (
               <div className="space-y-2">
                 <Label htmlFor="other-service">請說明其他服務需求</Label>
-                <Textarea id="other-service" placeholder="請詳細說明您的服務需求..." className="min-h-[100px]" />
+                <Textarea
+                  id="other-service"
+                  placeholder="請詳細說明您的服務需求..."
+                  className="min-h-[100px]"
+                  value={step2Data?.otherService || ""}
+                  onChange={e =>
+                    setStep2Data({
+                      ...step2Data,
+                      otherService: e.target.value,
+                    })
+                  }
+                />
               </div>
             )}
 
@@ -70,8 +91,13 @@ export function Step2ServiceSelect() {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="pickup"
-                  checked={needPickup}
-                  onCheckedChange={(checked) => setNeedPickup(checked as boolean)}
+                  checked={step2Data?.extra || false}
+                  onCheckedChange={(checked) => {
+                    setStep2Data({
+                      ...step2Data,
+                      extra: checked === true,
+                    })
+                  }}
                 />
                 <Label htmlFor="pickup" className="text-sm font-normal">
                   需要到府牽車
@@ -82,7 +108,7 @@ export function Step2ServiceSelect() {
         </Card>
       </div>
 
-      <StepButtonGroup nextButtonText="下一步" />
+      <StepButtonGroup isNextDisabled={step2Data?.selectServe.length === 0} />
     </div>
   )
 }
